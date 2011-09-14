@@ -1,0 +1,5 @@
+name: codeigniter-oauth2
+version: 0.0.1
+compatibility: 2.0.0
+#dependencies:
+#  spark-2: 1.0.0
