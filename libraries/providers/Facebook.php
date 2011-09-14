@@ -32,6 +32,7 @@ class OAuth2_Provider_Facebook extends OAuth2_Provider
 			'name' => $user->name,
 			'location' => $user->hometown->name,
 			'description' => $user->bio,
+			'image' => 'http://graph.facebook.com/' . $user->id . '/picture?type=normal',
 			'urls' => array(
 			  'Facebook' => $user->link,
 			),
