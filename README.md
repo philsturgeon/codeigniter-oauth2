@@ -7,6 +7,7 @@ Note that this Spark ONLY provides the authorization mechanism. You will need to
 ## Currently Supported
 
 - Facebook
+- GitHub
 
 ## TODO
 
@@ -25,15 +26,15 @@ public function session($provider)
 {
 	$this->load->library('oauth2');
 	
-	$foo = OAuth2_Provider::factory($provider, array(
-		'client_id' => 'yourappid',
-		'client_secret' => 'your-facebook-secret',
+	$provider = OAuth2_Provider::factory($provider, array(
+		'client_id' => 'your-client-id',
+		'client_secret' => 'your-client-secret',
 	));
 
 	if ( ! isset($_GET['code']))
 	{
 		// By sending no options it'll come back here
-		$foo->authorize();
+		$provider->authorize();
 	}
 	
 	else
@@ -41,9 +42,9 @@ public function session($provider)
 		// Howzit?
 		try
 		{
-			$params = $foo->access($_GET['code']);
+			$params = $provider->access($_GET['code']);
 			
-			$user = $foo->get_user_info($params['access_token']);
+			$user = $provider->get_user_info($params['access_token']);
 			
 			// Here you should use this information to A) look for a user B) help a new user sign up with existing data.
 			// If you store it all in a cookie and redirect to a registration page this is crazy-simple.
@@ -57,8 +58,5 @@ public function session($provider)
 		}
 		
 	}
-	
-	echo "<pre>";
-	var_dump($foo);
 }
 ```
