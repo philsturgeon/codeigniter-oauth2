@@ -12,25 +12,6 @@
 abstract class OAuth2_Provider {
 
 	/**
-	 * Create a new provider.
-	 *
-	 *     // Load the Twitter provider
-	 *     $provider = OAuth_Provider::factory('twitter');
-	 *
-	 * @param   string   provider name
-	 * @param   array    provider options
-	 * @return  OAuth_Provider
-	 */
-	public static function factory($name, array $options = NULL)
-	{
-		include_once 'providers/'.ucfirst($name).'.php';
-		
-		$class = 'OAuth2_Provider_'.ucfirst($name);
-
-		return new $class($options);
-	}
-
-	/**
 	 * @var  string  provider name
 	 */
 	public $name;

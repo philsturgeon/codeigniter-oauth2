@@ -1,4 +1,4 @@
-# Codeigniter oAuth 2
+# Codeigniter OAuth 2.0
 
 Authorize users with your application in a driver-base fashion meaning one implementation works for multiple oAuth 2 providers.
 
@@ -15,7 +15,7 @@ This is just a prototype and so far only works with Facebook, meaning beyond imp
 
 Also, requests need to be WAY more bullet-proof, but there is no Request class in CodeIgniter and that is just yet another bloody thing I have to do first.
 
-This does not, and WILL NOT ever support any oAuth 1 providers. For that use [codeigniter-oauth](https://github.com/calvinfroedge/codeigniter-oauth).
+This does not, and WILL NOT ever support any OAuth 1 providers. For that use [codeigniter-oauth](https://github.com/calvinfroedge/codeigniter-oauth).
 
 ## Usage Example
 
@@ -26,7 +26,7 @@ public function session($provider)
 {
 	$this->load->library('oauth2');
 	
-	$provider = OAuth2_Provider::factory($provider, array(
+	$provider = $this->oauth2->provider($provider, array(
 		'client_id' => 'your-client-id',
 		'client_secret' => 'your-client-secret',
 	));

@@ -5,10 +5,29 @@ include('OAuth2_Client.php');
 include('OAuth2_Provider.php');
 
 /**
- * OAuth2.0 draft v10 server-side implementation.
+ * OAuth2.0
  *
- * @author Originally written by Tim Ridgely <tim.ridgely@gmail.com>.
- * @author Updated to draft v10 by Aaron Parecki <aaron@parecki.com>.
- * @author Debug, coding style clean up and documented by Edison Wong <hswong3i@pantarei-design.com>.
+ * @author Phil Sturgeon < @philsturgeon >
  */
-class OAuth2 {}
+class OAuth2 {
+	
+	/**
+	 * Create a new provider.
+	 *
+	 *     // Load the Twitter provider
+	 *     $provider = $this->oauth2->provider('twitter');
+	 *
+	 * @param   string   provider name
+	 * @param   array    provider options
+	 * @return  OAuth_Provider
+	 */
+	public static function provider($name, array $options = NULL)
+	{
+		include_once 'providers/'.ucfirst($name).'.php';
+		
+		$class = 'OAuth2_Provider_'.ucfirst($name);
+
+		return new $class($options);
+	}
+	
+}
