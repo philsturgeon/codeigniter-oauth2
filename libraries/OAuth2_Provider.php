@@ -96,10 +96,11 @@ abstract class OAuth2_Provider {
 			'redirect_uri' => isset($options['redirect_uri']) ? $options['redirect_uri'] : $this->redirect_uri,
 			'state' => $state,
 			'scope' => $this->scope,
+			'response_type' => 'code', # required for Windows Live
 		);
 		
 		$url = $this->url_authorize().'?'.http_build_query($params);
-		
+
 		redirect($url);
 	}
 
@@ -115,15 +116,34 @@ abstract class OAuth2_Provider {
 			'client_id' => $this->client_id,
 			'redirect_uri' => isset($options['redirect_uri']) ? $options['redirect_uri'] : $this->redirect_uri,
 			'client_secret' => $this->client_secret,
-			'code' => $code,	
+			'code' => $code,
+			'grant_type' => 'authorization_code', # required for Windows Live
 		);
 		
 		$url = $this->url_access_token().'?'.http_build_query($params);
 		
 		$response = file_get_contents($url);
-		$params = null;
-		parse_str($response, $params); 
 		
+		// this really needs to be improved heavily
+		switch($this->name)
+		{
+			// live
+			case 'live':
+				// json decode
+				$params = null;
+				$params = (array)json_decode($response);
+				
+				// end
+				break;
+			// everything else
+			default:
+				$params = null;
+				parse_str($response, $params); 
+				
+				// end
+				break;
+		}
+
 		if (isset($params['error']))
 		{
 			throw new OAuth2_Exception($params);
