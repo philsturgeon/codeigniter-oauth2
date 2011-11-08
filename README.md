@@ -8,10 +8,11 @@ Note that this Spark ONLY provides the authorization mechanism. You will need to
 
 - Facebook
 - GitHub
+- Windows Live Connect (Live)
 
 ## TODO
 
-This is just a prototype and so far only works with Facebook, meaning beyond implementing more providers it might just not work with others, so refactoring is going to be important. 
+This is just a prototype and so far only works with Facebook and others, meaning beyond implementing more providers it might just not work with others, so refactoring is going to be important. 
 
 Also, requests need to be WAY more bullet-proof, but there is no Request class in CodeIgniter and that is just yet another bloody thing I have to do first.
 
