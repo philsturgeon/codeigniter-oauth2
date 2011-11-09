@@ -96,6 +96,7 @@ abstract class OAuth2_Provider {
 			'redirect_uri' => isset($options['redirect_uri']) ? $options['redirect_uri'] : $this->redirect_uri,
 			'state' => $state,
 			'scope' => $this->scope,
+			'response_type' => 'code', # required for Windows Live
 		);
 		
 		$url = $this->url_authorize().'?'.http_build_query($params);
@@ -116,14 +117,26 @@ abstract class OAuth2_Provider {
 			'redirect_uri' => isset($options['redirect_uri']) ? $options['redirect_uri'] : $this->redirect_uri,
 			'client_secret' => $this->client_secret,
 			'code' => $code,	
+			'grant_type' => 'authorization_code', # required for Windows Live
 		);
 		
 		$url = $this->url_access_token().'?'.http_build_query($params);
 		
 		$response = file_get_contents($url);
+
 		$params = null;
-		parse_str($response, $params); 
-		
+
+		// TODO: This could be moved to a provider method to reduce provider specific awareness
+		switch($this->name)
+		{
+			case 'windowslive':
+				$params = json_decode($response, true);
+			break;
+
+			default:
+				parse_str($response, $params);
+		}
+
 		if (isset($params['error']))
 		{
 			throw new OAuth2_Exception($params);
