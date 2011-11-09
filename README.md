@@ -8,6 +8,7 @@ Note that this Spark ONLY provides the authorization mechanism. You will need to
 
 - Facebook
 - GitHub
+- Windows Live Connect (Windows Live)
 
 ## TODO
 
@@ -24,6 +25,7 @@ http://example.com/auth/session/facebook
 ```php
 public function session($provider)
 {
+	$this->load->helper('url_helper');
 	$this->load->library('oauth2');
 	
 	$provider = $this->oauth2->provider($provider, array(
