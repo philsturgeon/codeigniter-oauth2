@@ -124,24 +124,17 @@ abstract class OAuth2_Provider {
 		
 		$response = file_get_contents($url);
 
-		# this really needs to be improved
+		$params = null;
+
+		// TODO: This could be moved to a provider method to reduce provider specific awareness
 		switch($this->name)
 		{
-			// windows live
 			case 'windowslive':
-				// json decode
-				$params = null;
-				$params = (array)json_decode($response);
+				$params = json_decode($response, true);
+			break;
 
-				// end
-				break;
-			// everything else
 			default:
-				$params = null;
 				parse_str($response, $params);
-
-				// end
-				break;
 		}
 
 		if (isset($params['error']))
