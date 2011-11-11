@@ -1,6 +1,6 @@
 # Codeigniter OAuth 2.0
 
-Authorize users with your application in a driver-base fashion meaning one implementation works for multiple oAuth 2 providers. This is only to authenticate onto oauth providers and not to build an oauth service.
+Authorize users with your application in a driver-base fashion meaning one implementation works for multiple OAuth 2 providers. This is only to authenticate onto OAuth2 providers and not to build an OAuth2 service.
 
 Note that this Spark ONLY provides the authorization mechanism. There's an example controller below, however in a later version there will be a full controller.
 
@@ -12,7 +12,7 @@ Note that this Spark ONLY provides the authorization mechanism. There's an examp
 
 ## TODO
 
-This is a developing library and currently only supports a small number of oauth2 providers - more refactoring of code is to follow with a full implementation of an authentication class to store users details.
+This is a developing library and currently only supports a small number of OAuth2 providers - more refactoring of code is to follow with a full implementation of an authentication class to store users details.
 
 Requests should be done through a more stable system, there however isn't a request class in CodeIgniter.
 
