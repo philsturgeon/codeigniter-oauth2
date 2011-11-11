@@ -1,8 +1,8 @@
 # Codeigniter OAuth 2.0
 
-Authorize users with your application in a driver-base fashion meaning one implementation works for multiple oAuth 2 providers.
+Authorize users with your application in a driver-base fashion meaning one implementation works for multiple oAuth 2 providers. This is only to authenticate onto oauth providers and not to build an oauth service.
 
-Note that this Spark ONLY provides the authorization mechanism. You will need to implement the example controller so you can save this information to make API requests on the users behalf.
+Note that this Spark ONLY provides the authorization mechanism. There's an example controller below, however in a later version there will be a full controller.
 
 ## Currently Supported
 
@@ -12,11 +12,11 @@ Note that this Spark ONLY provides the authorization mechanism. You will need to
 
 ## TODO
 
-This is just a prototype and so far only works with Facebook, meaning beyond implementing more providers it might just not work with others, so refactoring is going to be important. 
+This is a developing library and currently only supports a small number of oauth2 providers - more refactoring of code is to follow with a full implementation of an authentication class to store users details.
 
-Also, requests need to be WAY more bullet-proof, but there is no Request class in CodeIgniter and that is just yet another bloody thing I have to do first.
+Requests should be done through a more stable system, there however isn't a request class in CodeIgniter.
 
-This does not, and WILL NOT ever support any OAuth 1 providers. For that use [codeigniter-oauth](https://github.com/calvinfroedge/codeigniter-oauth).
+This does not and will never support any OAuth 1 providers. For that use [codeigniter-oauth] (https://github.com/calvinfroedge/codeigniter-oauth).
 
 ## Usage Example
 
@@ -38,7 +38,6 @@ public function session($provider)
 		// By sending no options it'll come back here
 		$provider->authorize();
 	}
-	
 	else
 	{
 		// Howzit?
