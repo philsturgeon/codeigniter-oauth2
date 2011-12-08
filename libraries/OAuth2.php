@@ -1,7 +1,7 @@
 <?php
 	
 include('OAuth2_Exception.php');
-include('OAuth2_Client.php');
+include('OAuth2_Token.php');
 include('OAuth2_Provider.php');
 
 /**

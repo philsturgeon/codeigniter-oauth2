@@ -6,7 +6,7 @@ class OAuth2_Provider_Facebook extends OAuth2_Provider
 
 	public $uid_key = 'uid';
 	
-	public $scope = 'email,read_stream';
+	public $scope = array('email', 'read_stream');
 
 	public function url_authorize()
 	{
@@ -28,6 +28,7 @@ class OAuth2_Provider_Facebook extends OAuth2_Provider
 
 		// Create a response from the request
 		return array(
+			'uid' => $user->id,
 			'nickname' => $user->username,
 			'name' => $user->name,
 			'location' => $user->hometown->name,
@@ -35,11 +36,6 @@ class OAuth2_Provider_Facebook extends OAuth2_Provider
 			'image' => 'http://graph.facebook.com/' . $user->id . '/picture?type=normal',
 			'urls' => array(
 			  'Facebook' => $user->link,
-			),
-			'credentials' => array(
-				'uid' => $user->id,
-				'provider' => $this->name,
-				'token' => $token,
 			),
 		);
 	}

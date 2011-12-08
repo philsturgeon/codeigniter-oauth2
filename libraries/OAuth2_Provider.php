@@ -12,6 +12,22 @@
 abstract class OAuth2_Provider {
 
 	/**
+	 * Create a new provider.
+	 *
+	 *     // Load the Twitter provider
+	 *     $provider = OAuth2_Provider::forge('twitter');
+	 *
+	 * @param   string   provider name
+	 * @param   array    provider options
+	 * @return  OAuth_Provider
+	 */
+	public static function factory($name, array $options = null)
+	{	
+		$class = 'OAuth2_Provider_'.ucfirst($name);
+		return new $class($options);
+	}
+
+	/**
 	 * @var  string  provider name
 	 */
 	public $name;
@@ -22,9 +38,24 @@ abstract class OAuth2_Provider {
 	public $uid_key = 'uid';
 
 	/**
+	 * @var  string  scope separator, most use "," but some like Google are spaces
+	 */
+	public $scope_seperator = ',';
+
+	/**
+	 * @var  string  additional request parameters to be used for remote requests
+	 */
+	public $callback = null;
+
+	/**
 	 * @var  array  additional request parameters to be used for remote requests
 	 */
 	protected $params = array();
+
+	/**
+	 * @var  string  the method to use when requesting tokens
+	 */
+	protected $method = 'GET';
 
 	/**
 	 * Overloads default class properties from the options.
@@ -34,21 +65,26 @@ abstract class OAuth2_Provider {
 	 * @param   array   provider options
 	 * @return  void
 	 */
-	public function __construct(array $options = NULL)
+	public function __construct(array $options = array())
 	{
 		if ( ! $this->name)
 		{
 			// Attempt to guess the name from the class name
 			$this->name = strtolower(substr(get_class($this), strlen('OAuth2_Provider_')));
 		}
-		
-		foreach ($options as $key => $val)
+
+		if (empty($options['id']))
 		{
-			$this->{$key} = $val;
+			throw new Exception('Required option not provided: id');
 		}
+
+		$this->client_id = $options['id'];
 		
-		// Set a default, which will be used if none are provided pre-request
-		$this->redirect_uri = get_instance()->config->site_url(get_instance()->uri->uri_string());
+		isset($options['callback']) and $this->callback = $options['callback'];
+		isset($options['secret']) and $this->client_secret = $options['secret'];
+		isset($options['scope']) and $this->scope = $options['scope'];
+
+		$this->redirect_uri = site_url(get_instance()->uri->uri_string());
 	}
 
 	/**
@@ -90,17 +126,15 @@ abstract class OAuth2_Provider {
 	{
 		$state = md5(uniqid(rand(), TRUE));
 		get_instance()->session->set_userdata('state', $state);
-			
-		$params = array(
-			'client_id' => $this->client_id,
-			'redirect_uri' => isset($options['redirect_uri']) ? $options['redirect_uri'] : $this->redirect_uri,
-			'state' => $state,
-			'scope' => $this->scope,
-			'response_type' => 'code', # required for Windows Live
-		);
-		
-		$url = $this->url_authorize().'?'.http_build_query($params);
-		
+
+		$url = $this->url_authorize().'?'.http_build_query(array(
+			'client_id' 		=> $this->client_id,
+			'redirect_uri' 		=> isset($options['redirect_uri']) ? $options['redirect_uri'] : $this->redirect_uri,
+			'state' 			=> $state,
+			'scope'     		=> is_array($this->scope) ? implode($this->scope_seperator, $this->scope) : $this->scope,
+			'response_type' 	=> 'code',
+		));
+
 		redirect($url);
 	}
 
@@ -110,39 +144,78 @@ abstract class OAuth2_Provider {
 	* @param	string	The access code
 	* @return	object	Success or failure along with the response details
 	*/	
-	public function access($code)
+	public function access($code, $options = array())
 	{
 		$params = array(
-			'client_id' => $this->client_id,
-			'redirect_uri' => isset($options['redirect_uri']) ? $options['redirect_uri'] : $this->redirect_uri,
+			'client_id' 	=> $this->client_id,
 			'client_secret' => $this->client_secret,
-			'code' => $code,	
-			'grant_type' => 'authorization_code', # required for Windows Live
+			'grant_type' 	=> isset($options['grant_type']) ? $options['grant_type'] : 'authorization_code',
 		);
-		
-		$url = $this->url_access_token().'?'.http_build_query($params);
-		
-		$response = file_get_contents($url);
 
-		$params = null;
-
-		// TODO: This could be moved to a provider method to reduce provider specific awareness
-		switch($this->name)
+		switch ($params['grant_type'])
 		{
-			case 'windowslive':
-				$params = json_decode($response, true);
+			case 'authorization_code':
+				$params['code'] = $code;
+				$params['redirect_uri'] = isset($options['redirect_uri']) ? $options['redirect_uri'] : $this->redirect_uri;
+			break;
+
+			case 'refresh_token':
+				$params['refresh_token'] = $code;
+			break;
+		}
+
+		$response = null;	
+		$url = $this->url_access_token();
+
+		switch ($this->method)
+		{
+			case 'GET':
+
+				// Need to switch to Request library, but need to test it on one that works
+				$url .= '?'.http_build_query($params);
+				$response = file_get_contents($url);
+
+				parse_str($response, $return); 
+
+			break;
+
+			case 'POST':
+
+				$postdata = http_build_query($params);
+				$opts = array(
+					'http' => array(
+						'method'  => 'POST',
+						'header'  => 'Content-type: application/x-www-form-urlencoded',
+						'content' => $postdata
+					)
+				);
+				$context  = stream_context_create($opts);
+				$response = file_get_contents($url, false, $context);
+
+				$return = get_object_vars(json_decode($response));
+
 			break;
 
 			default:
-				parse_str($response, $params);
+				throw new OutOfBoundsException("Method '{$this->method}' must be either GET or POST");
 		}
 
-		if (isset($params['error']))
+		if (isset($return['error']))
 		{
-			throw new OAuth2_Exception($params);
+			throw new OAuth2_Exception($return);
 		}
 		
-		return $params;
+		switch ($params['grant_type'])
+		{
+			case 'authorization_code':
+				return OAuth2_Token::factory('access', $return);
+			break;
+
+			case 'refresh_token':
+				return OAuth2_Token::factory('refresh', $return);
+			break;
+		}
+		
 	}
 
 }
