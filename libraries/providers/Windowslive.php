@@ -6,19 +6,18 @@ class OAuth2_Provider_Windowslive extends OAuth2_Provider
 	// variables
 	public $name = 'windowslive';
 	public $uid_key = 'uid';
-	public $scope = 'wl.basic,wl.emails';
+	
+	public $scope = array('wl.basic', 'wl.emails');
 	
 	// authorise url
 	public function url_authorize()
 	{
-		// return the authorise URL
 		return 'https://oauth.live.com/authorize';
 	}
 	
 	// access token url
 	public function url_access_token()
 	{
-		// return the access token URL
 		return 'https://oauth.live.com/token';
 	}
 	
@@ -28,11 +27,11 @@ class OAuth2_Provider_Windowslive extends OAuth2_Provider
 	** use of scopes, check out the document at
 	** http://msdn.microsoft.com/en-gb/library/hh243648.aspx#user
 	*********************************/
-	public function get_user_info($token)
+	public function get_user_info(OAuth2_Token_Access $token)
 	{
 		// define the get user information token
 		$url = 'https://apis.live.net/v5.0/me?'.http_build_query(array(
-			'access_token' => $token,
+			'access_token' => $token->access_token,
 		));
 		
 		// perform network request
@@ -40,17 +39,13 @@ class OAuth2_Provider_Windowslive extends OAuth2_Provider
 
 		// create a response from the request and return it
 		return array(
-			'id'			=> $user->id,
-			'name' 			=> $user->name,
-//			'location' 		=> $user[''], # scope wl.postal_addresses is required
+			'uid' 		=> $user->id,
+			'name' 		=> $user->name,
+			'nickname' 	=> url_title($user->name, '_', true),
+//			'location' 	=> $user[''], # scope wl.postal_addresses is required
 										  # but won't be implemented by default
-			'locale' 		=> $user->locale,
-			'urls' 			=> array('WindowsLive' => $user->link),
-			'credentials' 	=> array(
-				'uid' 		=> $user->id,
-				'provider' 	=> $this->name,
-				'token' 	=> $token,
-			),
+			'locale' 	=> $user->locale,
+			'urls' 		=> array('Windows Live' => $user->link),
 		);
 	}
 }

@@ -16,27 +16,23 @@ class OAuth2_Provider_Github extends OAuth2_Provider {
 		return 'https://github.com/login/oauth/access_token';
 	}
 
-	public function get_user_info($token)
+	public function get_user_info(OAuth2_Token_Access $token)
 	{
 		$url = 'https://api.github.com/user?'.http_build_query(array(
-			'access_token' => $token,
+			'access_token' => $token->access_token,
 		));
 
 		$user = json_decode(file_get_contents($url));
 
 		// Create a response from the request
 		return array(
+			'uid' => $user->id,
 			'nickname' => $user->login,
 			'name' => $user->name,
 			'email' => $user->email,
 			'urls' => array(
 			  'GitHub' => 'http://github.com/'.$user->login,
 			  'Blog' => $user->blog,
-			),
-			'credentials' => array(
-				'uid' => $user->id,
-				'provider' => $this->name,
-				'token' => $token,
 			),
 		);
 	}

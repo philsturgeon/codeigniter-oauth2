@@ -12,22 +12,6 @@
 abstract class OAuth2_Provider {
 
 	/**
-	 * Create a new provider.
-	 *
-	 *     // Load the Twitter provider
-	 *     $provider = OAuth2_Provider::forge('twitter');
-	 *
-	 * @param   string   provider name
-	 * @param   array    provider options
-	 * @return  OAuth_Provider
-	 */
-	public static function factory($name, array $options = null)
-	{	
-		$class = 'OAuth2_Provider_'.ucfirst($name);
-		return new $class($options);
-	}
-
-	/**
 	 * @var  string  provider name
 	 */
 	public $name;
@@ -127,15 +111,16 @@ abstract class OAuth2_Provider {
 		$state = md5(uniqid(rand(), TRUE));
 		get_instance()->session->set_userdata('state', $state);
 
-		$url = $this->url_authorize().'?'.http_build_query(array(
+		$params = array(
 			'client_id' 		=> $this->client_id,
 			'redirect_uri' 		=> isset($options['redirect_uri']) ? $options['redirect_uri'] : $this->redirect_uri,
 			'state' 			=> $state,
-			'scope'     		=> is_array($this->scope) ? implode($this->scope_seperator, $this->scope) : $this->scope,
+			'scope'				=> is_array($this->scope) ? implode($this->scope_seperator, $this->scope) : $this->scope,
 			'response_type' 	=> 'code',
-		));
-
-		redirect($url);
+			'approval_prompt' => 'force' // - google force-recheck
+		);
+		
+		redirect($this->url_authorize().'?'.http_build_query($params));
 	}
 
 	/*
@@ -192,7 +177,7 @@ abstract class OAuth2_Provider {
 				$context  = stream_context_create($opts);
 				$response = file_get_contents($url, false, $context);
 
-				$return = get_object_vars(json_decode($response));
+				$return = json_decode($response, true);
 
 			break;
 
