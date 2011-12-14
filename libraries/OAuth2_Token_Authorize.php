@@ -33,7 +33,7 @@ class OAuth2_Token_Authorize extends OAuth2_Token
             throw new Exception('Required option not passed: code');
         }
 
-        elseif (!isset($options['redirect_uri']))
+        elseif ( ! isset($options['redirect_uri']))
         {
             throw new Exception('Required option not passed: redirect_uri');
         }
