@@ -13,7 +13,7 @@ abstract class OAuth2_Token {
 	/**
 	 * Create a new token object.
 	 *
-	 *     $token = OAuth2_Token::forge($name);
+	 *     $token = OAuth2_Token::factory($name);
 	 *
 	 * @param   string  token type
 	 * @param   array   token options
