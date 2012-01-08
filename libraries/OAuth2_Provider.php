@@ -174,7 +174,8 @@ abstract class OAuth2_Provider {
 						'content' => $postdata
 					)
 				);
-				$context  = stream_context_create($opts);
+				$_default_opts = stream_context_get_params(stream_context_get_default());
+				$context = stream_context_create(array_merge_recursive($_default_opts['options'], $opts));
 				$response = file_get_contents($url, false, $context);
 
 				$return = json_decode($response, true);
