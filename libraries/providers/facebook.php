@@ -31,7 +31,7 @@ class OAuth2_Provider_Facebook extends OAuth2_Provider
 			'uid' => $user->id,
 			'nickname' => $user->username,
 			'name' => $user->name,
-			'email' => $user->email,
+			'email' => isset($user->email) ? $user->email : null,
 			'location' => $user->hometown->name,
 			'description' => $user->bio,
 			'image' => 'https://graph.facebook.com/me/picture?type=normal&access_token='.$token->access_token,

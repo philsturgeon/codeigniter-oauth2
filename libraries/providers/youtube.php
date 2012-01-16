@@ -1,5 +1,5 @@
 <?php
-
+include(__dir__.'/google.php');
 class OAuth2_Provider_Youtube extends OAuth2_Provider_Google {  
 	
 	public $name = 'youtube';

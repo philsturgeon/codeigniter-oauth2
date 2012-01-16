@@ -9,6 +9,11 @@ class OAuth2_Provider_Windowslive extends OAuth2_Provider
 	
 	public $scope = array('wl.basic', 'wl.emails');
 	
+	/**
+	 * @var  string  the method to use when requesting tokens
+	 */
+	protected $method = 'POST';
+	
 	// authorise url
 	public function url_authorize()
 	{
