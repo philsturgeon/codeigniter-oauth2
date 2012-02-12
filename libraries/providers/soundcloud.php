@@ -1,15 +1,11 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class OAuth2_Provider_Soundcloud extends OAuth2_Provider
-{
-	public $name = 'soundcloud';
-	
+{	
 	/**
 	 * @var  string  the method to use when requesting tokens
 	 */
 	protected $method = 'POST';
-	
-	public $scope = array('non-expiring');
 
 	public function url_authorize()
 	{
@@ -34,8 +30,7 @@ class OAuth2_Provider_Soundcloud extends OAuth2_Provider
 			'uid' => $user->id,
 			'nickname' => $user->username,
 			'name' => $user->full_name,
-			// 'email' => isset($user->email) ? $user->email : null,
-			'location' => $user->country,
+			'location' => $user->country.' ,'.$user->country,
 			'description' => $user->description,
 			'image' => $user->avatar_url,
 			'urls' => array(
