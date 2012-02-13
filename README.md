@@ -11,7 +11,6 @@ Note that this Spark ONLY provides the authorization mechanism. There's an examp
 - GitHub
 - Google
 - Instagram
-- Unmagnify
 - Windows Live
 - YouTube
 
@@ -48,9 +47,9 @@ public function session($provider)
 		// Howzit?
 		try
 		{
-			$params = $provider->access($_GET['code']);
+			$token = $provider->access($_GET['code']);
 			
-			$user = $provider->get_user_info($params['access_token']);
+			$user = $provider->get_user_info($token->access_token);
 			
 			// Here you should use this information to A) look for a user B) help a new user sign up with existing data.
 			// If you store it all in a cookie and redirect to a registration page this is crazy-simple.
