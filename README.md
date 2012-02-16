@@ -20,48 +20,59 @@ This is a developing library and currently only supports a small number of OAuth
 
 Requests should be done through a more stable system, there however isn't a request class in CodeIgniter.
 
-This does not and will never support any OAuth 1 providers. For that use [codeigniter-oauth] (https://github.com/calvinfroedge/codeigniter-oauth).
-
 ## Usage Example
 
-http://example.com/auth/session/facebook
+This example will need the user to go to a certain URL, which will support multiple providers. I like to set a controller to handle it and either have one single "session" method - or have another method for callbacks if you want to separate out the code even more.
+
+Here you'll see we have the provider passed in as a URI segment of "facebook" which can be used to find config in a database, or in a config multi-dimensional array. If you want to hard code it all then that is just fine too.
+
+Send your user to `http://example.com/auth/session/facebook` where Auth is the name of the controller. This will also be the address of the "Callback URL" which will be required by many OAuth 2 providers such as Facebook.
 
 ```php
-public function session($provider)
+class Auth extends CI_Controller
 {
-	$this->load->helper('url_helper');
-	$this->load->library('oauth2');
+	public function session($provider)
+	{
+		$this->load->helper('url_helper');
+		
+		$this->load->spark('oauth2');
 	
-	$provider = $this->oauth2->provider($provider, array(
-		'client_id' => 'your-client-id',
-		'client_secret' => 'your-client-secret',
-	));
+		$provider = $this->oauth2->provider($provider, array(
+			'id' => 'your-client-id',
+			'secret' => 'your-client-secret',
+		));
 
-	if ( ! isset($_GET['code']))
-	{
-		// By sending no options it'll come back here
-		$provider->authorize();
-	}
-	else
-	{
-		// Howzit?
-		try
+		if ( ! isset($_GET['code']))
 		{
-			$token = $provider->access($_GET['code']);
-			
-			$user = $provider->get_user_info($token->access_token);
-			
-			// Here you should use this information to A) look for a user B) help a new user sign up with existing data.
-			// If you store it all in a cookie and redirect to a registration page this is crazy-simple.
-			echo "<pre>";
-			var_dump($user);
+			// By sending no options it'll come back here
+			$provider->authorize();
 		}
-		
-		catch (OAuth2_Exception $e)
+		else
 		{
-			show_error('That didnt work: '.$e);
-		}
+			// Howzit?
+			try
+			{
+				$token = $provider->access($_GET['code']);
+			
+				$user = $provider->get_user_info($token->access_token);
+			
+				// Here you should use this information to A) look for a user B) help a new user sign up with existing data.
+				// If you store it all in a cookie and redirect to a registration page this is crazy-simple.
+				echo "<pre>Tokens: ";
+				var_dump($token);
+				
+				echo "<pre>User Info: ";
+				var_dump($user);
+			}
 		
+			catch (OAuth2_Exception $e)
+			{
+				show_error('That didnt work: '.$e);
+			}
+		
+		}
 	}
 }
 ```
+
+If all goes well you should see a dump of user data and have `$token` available. If all does not go well you'll likely have a bunch of errors on your screen.
