@@ -1,4 +1,5 @@
-<?php
+<?php namespace OAuth2;
+
 /**
  * OAuth Provider
  *
@@ -9,7 +10,7 @@
  * @license    http://philsturgeon.co.uk/code/dbad-license
  */
 
-abstract class OAuth2_Provider {
+abstract class Provider {
 
 	/**
 	 * @var  string  provider name
@@ -59,7 +60,7 @@ abstract class OAuth2_Provider {
 
 		if (empty($options['id']))
 		{
-			throw new Exception('Required option not provided: id');
+			throw new \InvalidArgumentException('Required option not provided: id');
 		}
 
 		$this->client_id = $options['id'];
@@ -117,7 +118,7 @@ abstract class OAuth2_Provider {
 			'state' 			=> $state,
 			'scope'				=> is_array($this->scope) ? implode($this->scope_seperator, $this->scope) : $this->scope,
 			'response_type' 	=> 'code',
-			'approval_prompt' => 'force' // - google force-recheck
+			'approval_prompt' 	=> 'force' // - google force-recheck
 		);
 		
 		redirect($this->url_authorize().'?'.http_build_query($params));
@@ -183,22 +184,22 @@ abstract class OAuth2_Provider {
 			break;
 
 			default:
-				throw new OutOfBoundsException("Method '{$this->method}' must be either GET or POST");
+				throw new \OutOfBoundsException("Method '{$this->method}' must be either GET or POST");
 		}
 
 		if (isset($return['error']))
 		{
-			throw new OAuth2_Exception($return);
+			throw new Exception($return);
 		}
 		
 		switch ($params['grant_type'])
 		{
 			case 'authorization_code':
-				return OAuth2_Token::factory('access', $return);
+				return Token::factory('access', $return);
 			break;
 
 			case 'refresh_token':
-				return OAuth2_Token::factory('refresh', $return);
+				return Token::factory('refresh', $return);
 			break;
 		}
 		
