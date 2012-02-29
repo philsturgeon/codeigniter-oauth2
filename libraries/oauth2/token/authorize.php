@@ -1,4 +1,5 @@
-<?php
+<?php namespace OAuth2\Token;
+
 /**
  * OAuth2 Token
  *
@@ -8,8 +9,9 @@
  * @copyright  (c) 2011 HappyNinjas Ltd
  */
 
-class OAuth2_Token_Authorize extends OAuth2_Token
-{
+use \OAuth2\Token;
+
+class Authorize extends Token {
 	/**
 	 * @var  string  code
 	 */
@@ -30,12 +32,12 @@ class OAuth2_Token_Authorize extends OAuth2_Token
 	{
 		if ( ! isset($options['code']))
 	    {
-            throw new Exception('Required option not passed: code');
+            throw new \InvalidArgumentException('Required option not passed: code');
         }
 
         elseif ( ! isset($options['redirect_uri']))
         {
-            throw new Exception('Required option not passed: redirect_uri');
+            throw new \InvalidArgumentException('Required option not passed: redirect_uri');
         }
 		
 		$this->code = $options['code'];

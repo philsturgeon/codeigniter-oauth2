@@ -1,12 +1,32 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php namespace OAuth2\Provider;
 
-// OAuth2 Provider for Windows Live Connect
-class OAuth2_Provider_Windowslive extends OAuth2_Provider
+/**
+ * OAuth Provider Windows Live
+ *
+ * @package    CodeIgniter/OAuth
+ * @category   Provider
+ * @author     Phil Sturgeon
+ * @copyright  Phil Sturgeon
+ * @license    http://philsturgeon.co.uk/code/dbad-license
+ */
+
+use \OAuth2\Provider;
+
+class Windowslive extends Provider
 {
-	// variables
+	/**
+	 * @see ./oauth2/provider.php
+	 */
 	public $name = 'windowslive';
+
+	/**
+	 * @see ./oauth2/provider.php
+	 */
 	public $uid_key = 'uid';
 	
+	/**
+	 * @see ./oauth2/provider.php
+	 */
 	public $scope = array('wl.basic', 'wl.emails');
 	
 	/**
@@ -14,13 +34,17 @@ class OAuth2_Provider_Windowslive extends OAuth2_Provider
 	 */
 	protected $method = 'POST';
 	
-	// authorise url
+	/**
+	 * @see ./oauth2/provider.php
+	 */
 	public function url_authorize()
 	{
 		return 'https://oauth.live.com/authorize';
 	}
 	
-	// access token url
+	/**
+	 * @see ./oauth2/provider.php
+	 */
 	public function url_access_token()
 	{
 		return 'https://oauth.live.com/token';
@@ -32,7 +56,7 @@ class OAuth2_Provider_Windowslive extends OAuth2_Provider
 	** use of scopes, check out the document at
 	** http://msdn.microsoft.com/en-gb/library/hh243648.aspx#user
 	*********************************/
-	public function get_user_info(OAuth2_Token_Access $token)
+	public function get_user_info(\OAuth2\Token\Access $token)
 	{
 		// define the get user information token
 		$url = 'https://apis.live.net/v5.0/me?'.http_build_query(array(

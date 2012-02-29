@@ -1,23 +1,43 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php namespace OAuth2\Provider;
 
-class OAuth2_Provider_Soundcloud extends OAuth2_Provider
-{	
+/**
+ * OAuth Provider Soundcloud
+ *
+ * @package    CodeIgniter/OAuth
+ * @category   Provider
+ * @author     Phil Sturgeon
+ * @copyright  Phil Sturgeon
+ * @license    http://philsturgeon.co.uk/code/dbad-license
+ */
+
+use \OAuth2\Provider;
+
+class Soundcloud extends Provider {
 	/**
 	 * @var  string  the method to use when requesting tokens
 	 */
 	protected $method = 'POST';
 
+	/**
+	 * @see ./oauth2/provider.php
+	 */
 	public function url_authorize()
 	{
 		return 'https://soundcloud.com/connect';
 	}
 
+	/**
+	 * @see ./oauth2/provider.php
+	 */
 	public function url_access_token()
 	{
 		return 'https://api.soundcloud.com/oauth2/token';
 	}
 
-	public function get_user_info(OAuth2_Token_Access $token)
+	/**
+	 * @see ./oauth2/provider.php
+	 */
+	public function get_user_info(\OAuth2\Token\Access $token)
 	{
 		$url = 'https://api.soundcloud.com/me.json?'.http_build_query(array(
 			'oauth_token' => $token->access_token,

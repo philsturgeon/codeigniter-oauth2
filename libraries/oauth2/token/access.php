@@ -1,4 +1,5 @@
-<?php
+<?php namespace OAuth2\Token;
+
 /**
  * OAuth2 Token
  *
@@ -8,8 +9,9 @@
  * @copyright  (c) 2011 HappyNinjas Ltd
  */
 
-class OAuth2_Token_Access extends OAuth2_Token
-{
+use \OAuth2\Token;
+
+class Access extends Token {
 	/**
 	 * @var  string  access_token
 	 */
@@ -40,7 +42,7 @@ class OAuth2_Token_Access extends OAuth2_Token
 	{
 		if ( ! isset($options['access_token']))
 		{
-			throw new Exception('Required option not passed: access_token'.PHP_EOL.print_r($options, true));
+			throw new \InvalidArgumentException('Required option not passed: access_token'.PHP_EOL.print_r($options, true));
 		}
 		
 		// if ( ! isset($options['expires_in']) and ! isset($options['expires']))

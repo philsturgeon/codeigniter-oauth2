@@ -1,4 +1,4 @@
-<?php
+<?php namespace OAuth2;
 
 /**
  * OAuth2.0 draft v10 exception handling.
@@ -6,7 +6,8 @@
  * @author Originally written by Naitik Shah <naitik@facebook.com>.
  * @author Update to draft v10 by Edison Wong <hswong3i@pantarei-design.com>.
  */
-class OAuth2_Exception extends Exception {
+
+class Exception extends \Exception {
 
 	/**
 	 * The result from the API server that represents the exception information.
@@ -52,11 +53,8 @@ class OAuth2_Exception extends Exception {
 	public function __toString()
 	{
 		$str = $this->getType() . ': ';
-		if ($this->code != 0)
-		{
-			$str .= $this->code . ': ';
-		}
-		return $str . $this->message;
-	}
+		$str .= ($this->code != 0) ? $this->code.': ': '';
 
+		return $str.$this->message;
+	}
 }
