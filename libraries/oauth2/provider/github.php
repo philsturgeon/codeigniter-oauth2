@@ -37,7 +37,7 @@ class Github extends Provider {
 	/**
 	 * @see ./oauth2/provider.php
 	 */
-	public function get_user_info(\OAuth2\Token\Access $token)
+	public function get_user_info(\OAuth2\Token\Access $token, $as_object = FALSE)
 	{
 		$url = 'https://api.github.com/user?'.http_build_query(array(
 			'access_token' => $token->access_token,
@@ -45,16 +45,24 @@ class Github extends Provider {
 
 		$user = json_decode(file_get_contents($url));
 
-		// Create a response from the request
-		return array(
-			'uid' => $user->id,
-			'nickname' => $user->login,
-			'name' => $user->name,
-			'email' => $user->email,
-			'urls' => array(
-			  'GitHub' => 'http://github.com/'.$user->login,
-			  'Blog' => $user->blog,
-			),
-		);
+		if ($as_object)
+		{
+			// We're done
+			return $user;
+		}
+		else
+		{
+			// Create a response from the request
+			return array(
+				'uid' => $user->id,
+				'nickname' => $user->login,
+				'name' => $user->name,
+				'email' => $user->email,
+				'urls' => array(
+				  'GitHub' => 'http://github.com/'.$user->login,
+				  'Blog' => $user->blog,
+				),
+			);
+		}
 	}
 }

@@ -90,7 +90,7 @@ class Google extends Provider {
 	/**
 	 * @see ./oauth2/provider.php
 	 */
-	public function get_user_info(\OAuth2\Token\Access $token)
+	public function get_user_info(\OAuth2\Token\Access $token, $as_object = FALSE)
 	{
 		$url = 'https://www.googleapis.com/oauth2/v1/userinfo?alt=json&'.http_build_query(array(
 			'access_token' => $token->access_token,
@@ -98,17 +98,25 @@ class Google extends Provider {
 		
 		$user = json_decode(file_get_contents($url), true);
 
-		return array(
-			'uid' => $user['id'],
-			'nickname' => url_title($user['name'], '_', true),
-			'name' => $user['name'],
-			'first_name' => $user['given_name'],
-			'last_name' => $user['family_name'],
-			'email' => $user['email'],
-			'location' => null,
-			'image' => $user['picture'],
-			'description' => null,
-			'urls' => array(),
-		);
+		if ($as_object)
+		{
+			// We're done
+			return $user;
+		}
+		else
+		{
+			return array(
+				'uid' => $user['id'],
+				'nickname' => url_title($user['name'], '_', true),
+				'name' => $user['name'],
+				'first_name' => $user['given_name'],
+				'last_name' => $user['family_name'],
+				'email' => $user['email'],
+				'location' => null,
+				'image' => $user['picture'],
+				'description' => null,
+				'urls' => array(),
+			);
+		}
 	}
 }

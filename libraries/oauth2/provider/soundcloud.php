@@ -37,7 +37,7 @@ class Soundcloud extends Provider {
 	/**
 	 * @see ./oauth2/provider.php
 	 */
-	public function get_user_info(\OAuth2\Token\Access $token)
+	public function get_user_info(\OAuth2\Token\Access $token, $as_object = FALSE)
 	{
 		$url = 'https://api.soundcloud.com/me.json?'.http_build_query(array(
 			'oauth_token' => $token->access_token,
@@ -45,18 +45,26 @@ class Soundcloud extends Provider {
 
 		$user = json_decode(file_get_contents($url));
 
-		// Create a response from the request
-		return array(
-			'uid' => $user->id,
-			'nickname' => $user->username,
-			'name' => $user->full_name,
-			'location' => $user->country.' ,'.$user->country,
-			'description' => $user->description,
-			'image' => $user->avatar_url,
-			'urls' => array(
-				'MySpace' => $user->myspace_name,
-				'Website' => $user->website,
-			),
-		);
+		if ($as_object)
+		{
+			// We're done
+			return $user;
+		}
+		else
+		{
+			// Create a response from the request
+			return array(
+				'uid' => $user->id,
+				'nickname' => $user->username,
+				'name' => $user->full_name,
+				'location' => $user->country.' ,'.$user->country,
+				'description' => $user->description,
+				'image' => $user->avatar_url,
+				'urls' => array(
+					'MySpace' => $user->myspace_name,
+					'Website' => $user->website,
+				),
+			);
+		}
 	}
 }

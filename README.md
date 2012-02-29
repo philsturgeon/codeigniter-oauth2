@@ -1,5 +1,5 @@
-# Codeigniter OAuth 2.0
-
+# Codeigniter OAuth 2.0 (PSR0-compliant with PHP5 Autoloader)
+**This is based on the Phil Sturgeon's CodeIgniter OAuth2 Spark**
 Authorize users with your application in a driver-base fashion meaning one implementation works for multiple OAuth 2 providers. This is only to authenticate onto OAuth2 providers and not to build an OAuth2 service.
 
 Note that this Spark ONLY provides the authorization mechanism. There's an example controller below, however in a later version there will be a full controller.
@@ -54,7 +54,9 @@ class Auth extends CI_Controller
 			{
 				$token = $provider->access($_GET['code']);
 			
-				$user = $provider->get_user_info($token->access_token);
+				// Pass TRUE to second parameter after 'token'
+				// will return the original user object
+				$user = $provider->get_user_info($token);
 			
 				// Here you should use this information to A) look for a user B) help a new user sign up with existing data.
 				// If you store it all in a cookie and redirect to a registration page this is crazy-simple.
@@ -65,7 +67,7 @@ class Auth extends CI_Controller
 				var_dump($user);
 			}
 		
-			catch (OAuth2_Exception $e)
+			catch (OAuth2\Exception $e)
 			{
 				show_error('That didnt work: '.$e);
 			}

@@ -56,7 +56,7 @@ class Windowslive extends Provider
 	** use of scopes, check out the document at
 	** http://msdn.microsoft.com/en-gb/library/hh243648.aspx#user
 	*********************************/
-	public function get_user_info(\OAuth2\Token\Access $token)
+	public function get_user_info(\OAuth2\Token\Access $token, $as_object = FALSE)
 	{
 		// define the get user information token
 		$url = 'https://apis.live.net/v5.0/me?'.http_build_query(array(
@@ -66,15 +66,23 @@ class Windowslive extends Provider
 		// perform network request
 		$user = json_decode(file_get_contents($url));
 
-		// create a response from the request and return it
-		return array(
-			'uid' 		=> $user->id,
-			'name' 		=> $user->name,
-			'nickname' 	=> url_title($user->name, '_', true),
-//			'location' 	=> $user[''], # scope wl.postal_addresses is required
-										  # but won't be implemented by default
-			'locale' 	=> $user->locale,
-			'urls' 		=> array('Windows Live' => $user->link),
-		);
+		if ($as_object)
+		{
+			// We're done
+			return $user;
+		}
+		else
+		{
+			// create a response from the request and return it
+			return array(
+				'uid' 		=> $user->id,
+				'name' 		=> $user->name,
+				'nickname' 	=> url_title($user->name, '_', true),
+	//			'location' 	=> $user[''], # scope wl.postal_addresses is required
+											  # but won't be implemented by default
+				'locale' 	=> $user->locale,
+				'urls' 		=> array('Windows Live' => $user->link),
+			);
+		}
 	}
 }

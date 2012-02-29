@@ -47,13 +47,10 @@ class Facebook extends Provider {
 	/**
 	 * @see ./oauth2/provider.php
 	 */
-	public function get_user_info($token, $as_object = FALSE)
+	public function get_user_info(\Oauth2\Token\Access $token, $as_object = FALSE)
 	{
-		// Get the access token
-		$access_token = ($token instanceof \Oauth2\Token\Access) ? $token->access_token : $token;
-
 		$url = 'https://graph.facebook.com/me?'.http_build_query(array(
-			'access_token' => $access_token,
+			'access_token' => $token->access_token,
 		));
 
 		$user = json_decode(file_get_contents($url));
@@ -73,7 +70,7 @@ class Facebook extends Provider {
 				'email' => isset($user->email) ? $user->email : null,
 				'location' => isset($user->hometown->name) ? $user->hometown->name : null,
 				'description' => isset($user->bio) ? $user->bio : null,
-				'image' => 'https://graph.facebook.com/me/picture?type=normal&access_token='.$access_token,
+				'image' => 'https://graph.facebook.com/me/picture?type=normal&access_token='.$token->access_token,
 				'urls' => array(
 				  'Facebook' => $user->link,
 				),
