@@ -31,7 +31,22 @@ class OAuth2_Provider_Paypal extends OAuth2_Provider
                     'oauth_token' => $token
                 ));
 
-        return json_decode(file_get_contents($url));
+        $user = json_decode(file_get_contents($url));
+		$user = $user->identity;
+		return array(
+		            'uid' => $user['userId'],
+		            'nickname' => url_title($user['fullName'], '_', true),
+		            'name' => $user['fullName'],
+		            'first_name' => $user['firstName'],
+		            'last_name' => $user['lastName'],
+		            'email' => $user['emails'][0],
+		            'location' => $user->addresses[0],
+		            'image' => null,
+		            'description' => null,
+		            'urls' => array(
+						'PayPal' => null
+					)
+		        );
     }
 
 }
