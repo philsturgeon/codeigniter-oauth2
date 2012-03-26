@@ -117,7 +117,7 @@ abstract class OAuth2_Provider {
 			'state' 			=> $state,
 			'scope'				=> is_array($this->scope) ? implode($this->scope_seperator, $this->scope) : $this->scope,
 			'response_type' 	=> 'code',
-			'approval_prompt' => 'force' // - google force-recheck
+			'approval_prompt'   => 'force' // - google force-recheck
 		);
 		
 		redirect($this->url_authorize().'?'.http_build_query($params));

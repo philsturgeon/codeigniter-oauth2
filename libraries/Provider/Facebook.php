@@ -6,7 +6,7 @@ class OAuth2_Provider_Facebook extends OAuth2_Provider
 
 	public $uid_key = 'uid';
 	
-	public $scope = array('email', 'read_stream');
+	public $scope = array('offline_access', 'email', 'read_stream');
 
 	public function url_authorize()
 	{
@@ -31,6 +31,8 @@ class OAuth2_Provider_Facebook extends OAuth2_Provider
 			'uid' => $user->id,
 			'nickname' => $user->username,
 			'name' => $user->name,
+			'first_name' => $user->first_name,
+			'last_name' => $user->last_name,
 			'email' => isset($user->email) ? $user->email : null,
 			'location' => isset($user->hometown->name) ? $user->hometown->name : null,
 			'description' => isset($user->bio) ? $user->bio : null,
