@@ -160,20 +160,31 @@ abstract class OAuth2_Provider {
 				$url .= '?'.http_build_query($params);
 				$response = file_get_contents($url);
 
-				parse_str($response, $return); 
+				parse_str($response, $return);
 
 			break;
 
 			case 'POST':
 
-				$postdata = http_build_query($params);
+				/* 	$ci = get_instance();
+
+				$ci->load->spark('curl/1.2.1');
+
+				$ci->curl
+					->create($url)
+					->post($params, array('failonerror' => false));
+
+				$response = $ci->curl->execute();
+				*/
+
 				$opts = array(
 					'http' => array(
 						'method'  => 'POST',
 						'header'  => 'Content-type: application/x-www-form-urlencoded',
-						'content' => $postdata
+						'content' => http_build_query($params),
 					)
 				);
+
 				$_default_opts = stream_context_get_params(stream_context_get_default());
 				$context = stream_context_create(array_merge_recursive($_default_opts['options'], $opts));
 				$response = file_get_contents($url, false, $context);
@@ -186,7 +197,7 @@ abstract class OAuth2_Provider {
 				throw new OutOfBoundsException("Method '{$this->method}' must be either GET or POST");
 		}
 
-		if (isset($return['error']))
+		if ( ! empty($return['error']))
 		{
 			throw new OAuth2_Exception($return);
 		}
