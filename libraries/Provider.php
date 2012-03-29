@@ -1,16 +1,16 @@
 <?php
 /**
- * OAuth Provider
+ * OAuth2 Provider
  *
- * @package    CodeIgniter/OAuth
+ * @package    CodeIgniter/OAuth2
  * @category   Provider
  * @author     Phil Sturgeon
- * @copyright  Phil Sturgeon
+ * @copyright  (c) 2012 HappyNinjas Ltd
  * @license    http://philsturgeon.co.uk/code/dbad-license
  */
 
-abstract class OAuth2_Provider {
-
+abstract class OAuth2_Provider
+{
 	/**
 	 * @var  string  provider name
 	 */
@@ -22,14 +22,9 @@ abstract class OAuth2_Provider {
 	public $uid_key = 'uid';
 
 	/**
-	 * @var  string  scope separator, most use "," but some like Google are spaces
-	 */
-	public $scope_seperator = ',';
-
-	/**
 	 * @var  string  additional request parameters to be used for remote requests
 	 */
-	public $callback = null;
+	public $callback;
 
 	/**
 	 * @var  array  additional request parameters to be used for remote requests
@@ -40,6 +35,16 @@ abstract class OAuth2_Provider {
 	 * @var  string  the method to use when requesting tokens
 	 */
 	protected $method = 'GET';
+
+	/**
+	 * @var  string  default scope (useful if a scope is required for user info)
+	 */
+	protected $scope;
+
+	/**
+	 * @var  string  scope separator, most use "," but some like Google are spaces
+	 */
+	protected $scope_seperator = ',';
 
 	/**
 	 * Overloads default class properties from the options.
