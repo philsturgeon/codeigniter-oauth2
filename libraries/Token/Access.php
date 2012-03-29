@@ -36,7 +36,7 @@ class OAuth2_Token_Access extends OAuth2_Token
 	 * @param   array   token options
 	 * @return  void
 	 */
-	public function __construct(array $options)
+	public function __construct(array $options = null)
 	{
 		if ( ! isset($options['access_token']))
 		{

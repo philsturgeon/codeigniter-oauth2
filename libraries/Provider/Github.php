@@ -1,11 +1,16 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+/**
+ * GitHub OAuth2 Provider
+ *
+ * @package    CodeIgniter/OAuth2
+ * @category   Provider
+ * @author     Phil Sturgeon
+ * @copyright  (c) 2012 HappyNinjas Ltd
+ * @license    http://philsturgeon.co.uk/code/dbad-license
+ */
 
-class OAuth2_Provider_Github extends OAuth2_Provider {
-	
-	public $name = 'github';
-	
-	// https://api.github.com
-
+class OAuth2_Provider_Github extends OAuth2_Provider
+{
 	public function url_authorize()
 	{
 		return 'https://github.com/login/oauth/authorize';

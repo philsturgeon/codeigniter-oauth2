@@ -4,21 +4,26 @@ Authorize users with your application in a driver-base fashion meaning one imple
 
 Note that this Spark ONLY provides the authorization mechanism. There's an example controller below, however in a later version there will be a full controller.
 
-## Currently Supported
+## Examples
+
+OAuth 2 is split into two sections, clients and providers. A client is an application - perhaps a basic Twitter feed aggregator - which 
+authenticates with an OAuth 2 provider, which in this example would be Twitter itself. You can interact with any provider which is supported in the list below:
 
 - Facebook
 - Foursquare
 - GitHub
 - Google
+- PayPal
 - Instagram
+- Soundcloud
 - Windows Live
 - YouTube
 
+
 ## TODO
 
-This is a developing library and currently only supports a small number of OAuth2 providers - more refactoring of code is to follow with a full implementation of an authentication class to store users details.
-
-Requests should be done through a more stable system, there however isn't a request class in CodeIgniter.
+- Requests should be done through a more stable system, there however isn't a Request class in CodeIgniter.
+- Add unit tests and get on Travis
 
 ## Usage Example
 

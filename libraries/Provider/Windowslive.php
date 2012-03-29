@@ -1,13 +1,17 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+/**
+ * Windows Live OAuth2 Provider
+ *
+ * @package    CodeIgniter/OAuth2
+ * @category   Provider
+ * @author     Phil Sturgeon
+ * @copyright  (c) 2012 HappyNinjas Ltd
+ * @license    http://philsturgeon.co.uk/code/dbad-license
+ */
 
-// OAuth2 Provider for Windows Live Connect
 class OAuth2_Provider_Windowslive extends OAuth2_Provider
-{
-	// variables
-	public $name = 'windowslive';
-	public $uid_key = 'uid';
-	
-	public $scope = array('wl.basic', 'wl.emails');
+{	
+	protected $scope = array('wl.basic', 'wl.emails');
 	
 	/**
 	 * @var  string  the method to use when requesting tokens

@@ -1,12 +1,17 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+/**
+ * Facebook OAuth2 Provider
+ *
+ * @package    CodeIgniter/OAuth2
+ * @category   Provider
+ * @author     Phil Sturgeon
+ * @copyright  (c) 2012 HappyNinjas Ltd
+ * @license    http://philsturgeon.co.uk/code/dbad-license
+ */
 
 class OAuth2_Provider_Facebook extends OAuth2_Provider
-{  
-	public $name = 'facebook';
-
-	public $uid_key = 'uid';
-	
-	public $scope = array('offline_access', 'email', 'read_stream');
+{
+	protected $scope = array('offline_access', 'email', 'read_stream');
 
 	public function url_authorize()
 	{
