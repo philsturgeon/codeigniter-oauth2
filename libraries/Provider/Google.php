@@ -1,15 +1,24 @@
-<?php
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+/**
+ * Google OAuth2 Provider
+ *
+ * @package    CodeIgniter/OAuth2
+ * @category   Provider
+ * @author     Phil Sturgeon
+ * @copyright  (c) 2012 HappyNinjas Ltd
+ * @license    http://philsturgeon.co.uk/code/dbad-license
+ */
 
-class OAuth2_Provider_Google extends OAuth2_Provider {  
-	
-	public $name = 'google';
-	
-	public $human = 'Google';
-
-	public $uid_key = 'uid';
-	
+class OAuth2_Provider_Google extends OAuth2_Provider
+{
+	/**
+	 * @var  string  the method to use when requesting tokens
+	 */
 	public $method = 'POST';
 
+	/**
+	 * @var  string  scope separator, most use "," but some like Google are spaces
+	 */
 	public $scope_seperator = ' ';
 
 	public function url_authorize()

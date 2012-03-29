@@ -19,11 +19,11 @@ abstract class OAuth2_Token {
 	 * @param   array   token options
 	 * @return  Token
 	 */
-	public static function factory($type = 'access', array $options = null)
+	public static function factory($name = 'access', array $options = null)
 	{
-		$class = 'OAuth2_Token_'.ucfirst($type);
+		include_once 'Token/'.strtolower($name).'.php';
 		
-		include $class.'.php';
+		$class = 'OAuth2_Token_'.ucfirst($name);
 		
 		return new $class($options);
 	}
