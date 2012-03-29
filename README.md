@@ -40,14 +40,14 @@ class Auth extends CI_Controller
 	{
 		$this->load->helper('url_helper');
 		
-		$this->load->spark('oauth2');
+		$this->load->spark('oauth2/0.3.0');
 	
 		$provider = $this->oauth2->provider($provider, array(
 			'id' => 'your-client-id',
 			'secret' => 'your-client-secret',
 		));
 
-		if ( ! isset($_GET['code']))
+		if ( ! $this->input->get('code'))
 		{
 			// By sending no options it'll come back here
 			$provider->authorize();
@@ -59,14 +59,14 @@ class Auth extends CI_Controller
 			{
 				$token = $provider->access($_GET['code']);
 			
-				$user = $provider->get_user_info($token->access_token);
+				$user = $provider->get_user_info($token);
 			
 				// Here you should use this information to A) look for a user B) help a new user sign up with existing data.
 				// If you store it all in a cookie and redirect to a registration page this is crazy-simple.
 				echo "<pre>Tokens: ";
-				var_dump($token).PHP_EOL.PHP_EOL;
+				var_dump($token);
 				
-				echo "User Info: ";
+				echo "\n\nUser Info: ";
 				var_dump($user);
 			}
 		
