@@ -8,13 +8,38 @@ class OAuth2_Provider_Blooie extends OAuth2_Provider
 
 	public function url_authorize()
 	{
-		return 'http://local.bloo.ie/oauth';
+		switch (ENVIRONMENT)
+		{
+			case PYRO_DEVELOPMENT:
+				return 'http://local.bloo.ie/oauth';
+
+			case PYRO_STAGING:
+				return 'http://blooie-staging.pagodabox.com/oauth';
+
+			case PYRO_PRODUCTIION:
+				return 'https://bloo.ie/oauth';
+
+			default:
+				exit('What the crap?!');
+		}
+		
 	}
 
 	public function url_access_token()
 	{
-		return 'http://local.bloo.ie/oauth/access_token';
-	}
+		switch (ENVIRONMENT)
+		{
+			case PYRO_DEVELOPMENT:
+				return 'http://local.bloo.ie/oauth/access_token';
+
+			case PYRO_STAGING:
+				return 'http://blooie-staging.pagodabox.com/oauth/access_token';
+
+			case PYRO_PRODUCTIION:
+				return 'https://bloo.ie/oauth/access_token';
+
+			default:
+		}
 
 	public function get_user_info(OAuth2_Token_Access $token)
 	{
