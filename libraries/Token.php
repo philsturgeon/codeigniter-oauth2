@@ -21,7 +21,7 @@ abstract class OAuth2_Token {
 	 */
 	public static function factory($name = 'access', array $options = null)
 	{
-		include_once 'Token/'.strtolower($name).'.php';
+		include_once 'Token/'.ucfirst($name).'.php';
 		
 		$class = 'OAuth2_Token_'.ucfirst($name);
 		
