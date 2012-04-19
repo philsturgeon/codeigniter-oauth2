@@ -9,14 +9,6 @@
 
 class OAuth2_Provider_Vkontakte extends OAuth2_Provider
 {
-	public function __construct(array $options = array())
-	{
-		parent::__construct(array(
-            'id' => 'your_client_id',
-            'secret' => 'your_client_secret',
-        ));
-	}
-
 	public function url_authorize()
 	{
 		return 'http://oauth.vk.com/authorize';

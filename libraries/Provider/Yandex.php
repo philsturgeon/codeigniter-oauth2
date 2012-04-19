@@ -11,14 +11,6 @@ class OAuth2_Provider_Yandex extends OAuth2_Provider
 {
 	public $method = 'POST';
 	
-	public function __construct(array $options = array())
-	{
-		parent::__construct(array(
-            'id' => 'your_client_id',
-            'secret' => 'your_secret_id',
-        ));
-	}
-
 	public function url_authorize()
 	{
 		return 'https://oauth.yandex.ru/authorize';
