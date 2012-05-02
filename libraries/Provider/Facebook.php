@@ -34,7 +34,7 @@ class OAuth2_Provider_Facebook extends OAuth2_Provider
 		// Create a response from the request
 		return array(
 			'uid' => $user->id,
-			'nickname' => $user->username,
+			'nickname' => isset($user->username) ? $user->username : null,
 			'name' => $user->name,
 			'first_name' => $user->first_name,
 			'last_name' => $user->last_name,
