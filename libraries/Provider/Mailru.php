@@ -16,16 +16,6 @@ class OAuth2_Provider_Mailru extends OAuth2_Provider
 	public function __construct(array $options = array())
 	{
 
-//ID:675238
-//Приватный ключ:85c113000674f46477445994a5e570b9
-//Секретный ключ:e7ed5c1dd9fb7a80b45da73917320491
-
-		parent::__construct(array(
-            'id' => '675238',
-            'secret' => 'e7ed5c1dd9fb7a80b45da73917320491',
-        ));
-	}
-
 	public function url_authorize()
 	{
 		return 'https://connect.mail.ru/oauth/authorize';
