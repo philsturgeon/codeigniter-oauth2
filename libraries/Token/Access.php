@@ -56,6 +56,9 @@ class OAuth2_Token_Access extends OAuth2_Token
 		//Vkontakte uses user_id instead of uid
 		isset($options['user_id']) and $this->uid = $options['user_id'];
 		
+		//Mailru uses x_mailru_vid instead of uid
+		isset($options['x_mailru_vid']) and $this->uid = $options['x_mailru_vid'];
+		
 		// We need to know when the token expires, add num. seconds to current time
 		isset($options['expires_in']) and $this->expires = time() + ((int) $options['expires_in']);
 		
