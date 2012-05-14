@@ -24,7 +24,8 @@ class OAuth2_Provider_Mailru extends OAuth2_Provider
 		return 'https://connect.mail.ru/oauth/token';
 	}
 	
-	function sign_server_server(array $request_params, $secret_key) {
+	protected function sign_server_server(array $request_params, $secret_key)
+	{
 		ksort($request_params);
 		$params = '';
 		foreach ($request_params as $key => $value) {
