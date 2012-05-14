@@ -9,8 +9,6 @@
 
 class OAuth2_Provider_Mailru extends OAuth2_Provider
 {
-	protected $scope = array('offline_access', 'email', 'read_stream');
-	
 	public $method = 'POST';
 
 	public function __construct(array $options = array())
@@ -37,7 +35,6 @@ class OAuth2_Provider_Mailru extends OAuth2_Provider
 
 	public function get_user_info(OAuth2_Token_Access $token)
 	{
-//		echo $token;
 		$request_params = array(
 			'app_id' => $this->client_id,
 			'method' => 'users.getInfo',
@@ -48,11 +45,9 @@ class OAuth2_Provider_Mailru extends OAuth2_Provider
 		
 		$sig = $this->sign_server_server($request_params,$this->client_secret);
 		$url = 'http://www.appsmail.ru/platform/api?'.http_build_query($request_params).'&sig='.$sig;
-//		echo $url;
 
 		$user = json_decode(file_get_contents($url));
 
-		// Create a response from the request
 		return array(
 			'uid' => $user[0]->uid,
 			'nickname' => $user[0]->nick,
