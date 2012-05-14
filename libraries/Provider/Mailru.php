@@ -11,9 +11,6 @@ class OAuth2_Provider_Mailru extends OAuth2_Provider
 {
 	public $method = 'POST';
 
-	public function __construct(array $options = array())
-	{
-
 	public function url_authorize()
 	{
 		return 'https://connect.mail.ru/oauth/authorize';
