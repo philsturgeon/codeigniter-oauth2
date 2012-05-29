@@ -21,10 +21,12 @@ abstract class OAuth2_Token {
 	 */
 	public static function factory($name = 'access', array $options = null)
 	{
-		include_once 'Token/'.ucfirst($name).'.php';
-		
-		$class = 'OAuth2_Token_'.ucfirst($name);
-		
+		$name = ucfirst(strtolower($name));
+
+		include_once 'Token/'.$name.'.php';
+
+		$class = 'OAuth2_Token_'.$name;
+
 		return new $class($options);
 	}
 
@@ -41,7 +43,7 @@ abstract class OAuth2_Token {
 	{
 		return $this->$key;
 	}
-	
+
 	/**
 	 * Return a boolean if the property is set
 	 *

@@ -1,5 +1,5 @@
 <?php
-	
+
 include('Exception.php');
 include('Token.php');
 include('Provider.php');
@@ -10,7 +10,7 @@ include('Provider.php');
  * @author Phil Sturgeon < @philsturgeon >
  */
 class OAuth2 {
-	
+
 	/**
 	 * Create a new provider.
 	 *
@@ -23,11 +23,13 @@ class OAuth2 {
 	 */
 	public static function provider($name, array $options = NULL)
 	{
-		include_once 'Provider/'.ucfirst($name).'.php';
-		
-		$class = 'OAuth2_Provider_'.ucfirst($name);
+		$name = ucfirst(strtolower($name));
+
+		include_once 'Provider/'.$name.'.php';
+
+		$class = 'OAuth2_Provider_'.$name;
 
 		return new $class($options);
 	}
-	
+
 }
