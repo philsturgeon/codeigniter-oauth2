@@ -9,6 +9,9 @@
 
 class OAuth2_Provider_Vkontakte extends OAuth2_Provider
 {
+	protected $method = 'POST';
+	public $uid_key = 'user_id';
+
 	public function url_authorize()
 	{
 		return 'http://oauth.vk.com/authorize';
@@ -29,13 +32,14 @@ class OAuth2_Provider_Vkontakte extends OAuth2_Provider
 		));
 
 		$user = json_decode(file_get_contents($url))->response;
+
 		if(sizeof($user)==0)
 			return null;
 		else
 			$user = $user[0];
 
 		return array(
-			'uid' => $user->id,
+			'uid' => $user->uid,
 			'nickname' => isset($user->nickname) ? $user->nickname : null,
 			'name' => isset($user->name) ? $user->name : null,
 			'first_name' => isset($user->first_name) ? $user->first_name : null,
