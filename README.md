@@ -40,7 +40,7 @@ class Auth extends CI_Controller
 	{
 		$this->load->helper('url_helper');
 		
-		$this->load->spark('oauth2/0.3.0');
+		$this->load->spark('oauth2/0.3.1');
 	
 		$provider = $this->oauth2->provider($provider, array(
 			'id' => 'your-client-id',
