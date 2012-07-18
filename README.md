@@ -13,11 +13,14 @@ authenticates with an OAuth 2 provider, which in this example would be Twitter i
 - Foursquare
 - GitHub
 - Google
-- PayPal
 - Instagram
+- Mailchimp
+- Mail.ru
+- PayPal
 - Soundcloud
+- Vkontakte
 - Windows Live
-- YouTube
+- Yandex
 
 
 ## TODO
@@ -40,7 +43,7 @@ class Auth extends CI_Controller
 	{
 		$this->load->helper('url_helper');
 		
-		$this->load->spark('oauth2/0.3.1');
+		$this->load->spark('oauth2/0.4.0');
 	
 		$provider = $this->oauth2->provider($provider, array(
 			'id' => 'your-client-id',
@@ -50,15 +53,18 @@ class Auth extends CI_Controller
 		if ( ! $this->input->get('code'))
 		{
 			// By sending no options it'll come back here
-			$provider->authorize();
+			$url = $provider->authorize();
+
+			redirect($url);
 		}
 		else
 		{
-			// Howzit?
 			try
 			{
+				// Have a go at creating an access token from the code
 				$token = $provider->access($_GET['code']);
 			
+				// Use this object to try and get some user details (username, full name, etc)
 				$user = $provider->get_user_info($token);
 			
 				// Here you should use this information to A) look for a user B) help a new user sign up with existing data.
@@ -86,9 +92,9 @@ Contribute
 ----------
 
 1. Check for open issues or open a new issue for a feature request or a bug
-2. Fork [the repository][] on Github to start making your changes to the
+2. Fork [the repository][repo] on Github to start making your changes to the
     `develop` branch (or branch off of it)
 3. Write a test which shows that the bug was fixed or that the feature works as expected
 4. Send a pull request and bug me until I merge it
 
-[the repository]: https://github.com/philsturgeon/codeigniter-oauth2
+[repo]: https://github.com/philsturgeon/codeigniter-oauth2

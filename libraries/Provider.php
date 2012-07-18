@@ -125,7 +125,7 @@ abstract class OAuth2_Provider
 			'approval_prompt'   => 'force' // - google force-recheck
 		);
 		
-		redirect($this->url_authorize().'?'.http_build_query($params));
+		return $this->url_authorize().'?'.http_build_query($params);
 	}
 
 	/*
@@ -171,30 +171,18 @@ abstract class OAuth2_Provider
 
 			case 'POST':
 
-				/* 	$ci = get_instance();
-
-				$ci->load->spark('curl/1.2.1');
-
-				$ci->curl
-					->create($url)
-					->post($params, array('failonerror' => false));
-
-				$response = $ci->curl->execute();
-				*/
-
+				$postdata = http_build_query($params);
 				$opts = array(
 					'http' => array(
 						'method'  => 'POST',
 						'header'  => 'Content-type: application/x-www-form-urlencoded',
-						'content' => http_build_query($params),
+						'content' => $postdata
 					)
 				);
-
-				$_default_opts = stream_context_get_params(stream_context_get_default());
-				$context = stream_context_create(array_merge_recursive($_default_opts['options'], $opts));
+				$context  = stream_context_create($opts);
 				$response = file_get_contents($url, false, $context);
 
-				$return = json_decode($response, true);
+				$return = get_object_vars(json_decode($response));
 
 			break;
 
@@ -207,17 +195,7 @@ abstract class OAuth2_Provider
 			throw new OAuth2_Exception($return);
 		}
 		
-		switch ($params['grant_type'])
-		{
-			case 'authorization_code':
-				return OAuth2_Token::factory('access', $return);
-			break;
-
-			case 'refresh_token':
-				return OAuth2_Token::factory('refresh', $return);
-			break;
-		}
-		
+		return OAuth2_Token::factory('access', $return);
 	}
 
 }
