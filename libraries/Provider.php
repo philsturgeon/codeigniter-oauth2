@@ -51,8 +51,8 @@ abstract class OAuth2_Provider
 	 *
 	 * Any of the provider options can be set here, such as app_id or secret.
 	 *
-	 * @param   array   provider options
-	 * @return  void
+	 * @param   array $options provider options
+	 * @throws  Exception if a required option is not provided
 	 */
 	public function __construct(array $options = array())
 	{
@@ -82,7 +82,7 @@ abstract class OAuth2_Provider
 	 *     // Get the provider signature
 	 *     $signature = $provider->signature;
 	 *
-	 * @param   string  variable name
+	 * @param   string $key variable name
 	 * @return  mixed
 	 */
 	public function __get($key)
@@ -108,12 +108,18 @@ abstract class OAuth2_Provider
 	 */
 	abstract public function url_access_token();
 
+	/**
+	 * @param OAuth2_Token_Access $token
+	 * @return array basic user info
+	 */
+	abstract public function get_user_info(OAuth2_Token_Access $token);
+
 	/*
 	* Get an authorization code from Facebook.  Redirects to Facebook, which this redirects back to the app using the redirect address you've set.
 	*/	
 	public function authorize($options = array())
 	{
-		$state = md5(uniqid(rand(), TRUE));
+		$state = md5(uniqid(rand(), true));
 		get_instance()->session->set_userdata('state', $state);
 
 		$params = array(
@@ -154,7 +160,7 @@ abstract class OAuth2_Provider
 			break;
 		}
 
-		$response = null;	
+		$response = null;
 		$url = $this->url_access_token();
 
 		switch ($this->method)
