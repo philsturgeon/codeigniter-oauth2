@@ -47,8 +47,7 @@ class OAuth2_Exception extends Exception {
 	* Returns the associated type for the error. This will default to
 	* 'Exception' when a type is not available.
 	*
-	* @return
-	*   The type for the error.
+	* @return  string  The type for the error.
 	*/
 	public function getType()
 	{
@@ -67,8 +66,7 @@ class OAuth2_Exception extends Exception {
 	/**
 	 * To make debugging easier.
 	 *
-	 * @returns
-	 *   The string representation of the error.
+	 * @return  string  The string representation of the error.
 	 */
 	public function __toString()
 	{
