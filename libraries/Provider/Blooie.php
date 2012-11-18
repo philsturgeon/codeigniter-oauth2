@@ -40,6 +40,7 @@ class OAuth2_Provider_Blooie extends OAuth2_Provider
 
 			default:
 		}
+	}
 
 	public function get_user_info(OAuth2_Token_Access $token)
 	{

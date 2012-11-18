@@ -15,9 +15,9 @@ abstract class OAuth2_Token {
 	 *
 	 *     $token = OAuth2_Token::factory($name);
 	 *
-	 * @param   string  token type
-	 * @param   array   token options
-	 * @return  Token
+	 * @param   string  $name     token type
+	 * @param   array   $options  token options
+	 * @return  OAuth2_Token
 	 */
 	public static function factory($name = 'access', array $options = null)
 	{
@@ -36,7 +36,7 @@ abstract class OAuth2_Token {
 	 *     // Get the token secret
 	 *     $secret = $token->secret;
 	 *
-	 * @param   string  variable name
+	 * @param   string  $key  variable name
 	 * @return  mixed
 	 */
 	public function __get($key)
@@ -50,7 +50,7 @@ abstract class OAuth2_Token {
 	 *     // Get the token secret
 	 *     if ($token->secret) exit('YAY SECRET');
 	 *
-	 * @param   string  variable name
+	 * @param   string  $key  variable name
 	 * @return  bool
 	 */
 	public function __isset($key)

@@ -33,8 +33,9 @@ class OAuth2_Token_Access extends OAuth2_Token
 	/**
 	 * Sets the token, expiry, etc values.
 	 *
-	 * @param   array   token options
-	 * @return  void
+	 * @param   array  $options   token options
+	 *
+	 * @throws Exception if required options are missing
 	 */
 	public function __construct(array $options = null)
 	{
