@@ -131,6 +131,8 @@ abstract class OAuth2_Provider
 			'approval_prompt'   => 'force' // - google force-recheck
 		);
 		
+		$params = array_merge($params, $this->params);
+		
 		redirect($this->url_authorize().'?'.http_build_query($params));
 	}
 
@@ -147,6 +149,8 @@ abstract class OAuth2_Provider
 			'client_secret' => $this->client_secret,
 			'grant_type' 	=> isset($options['grant_type']) ? $options['grant_type'] : 'authorization_code',
 		);
+		
+		$params = array_merge($params, $this->params);
 
 		switch ($params['grant_type'])
 		{
