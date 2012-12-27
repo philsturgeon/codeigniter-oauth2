@@ -23,7 +23,7 @@ class OAuth2 {
 	 */
 	public static function provider($name, array $options = NULL)
 	{
-		$name = ucfirst(strtolower($name));
+		$name = ucfirst(strtolower(basename($name)));
 
 		include_once 'Provider/'.$name.'.php';
 
