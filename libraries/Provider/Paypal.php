@@ -37,8 +37,8 @@ class OAuth2_Provider_Paypal extends OAuth2_Provider
             'oauth_token' => $token->access_token
         ));
 
-        $user = json_decode(file_get_contents($url));
-		$user = $user->identity;
+        $user = json_decode(file_get_contents($url),true);
+		$user = $user['identity'];
 
 		return array(
             'uid' => $user['userId'],
