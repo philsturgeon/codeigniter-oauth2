@@ -17,9 +17,9 @@ class OAuth2 {
 	 *     // Load the Twitter provider
 	 *     $provider = $this->oauth2->provider('twitter');
 	 *
-	 * @param   string $name    provider name
-	 * @param   array  $options provider options
-	 * @return  OAuth2_Provider
+	 * @param   string   provider name
+	 * @param   array    provider options
+	 * @return  OAuth_Provider
 	 */
 	public static function provider($name, array $options = NULL)
 	{
