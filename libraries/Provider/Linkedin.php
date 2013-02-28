@@ -9,8 +9,8 @@ if (!defined('BASEPATH'))
  * 
  * @package    CodeIgniter/OAuth2
  * @category   Provider
- * @author     Benjamin Hill benjaminhill@gmail.com
- * @copyright  (c) Same as parent project
+ * @author     Benjamin Hill
+ * @copyright  (c) None
  * @license    http://philsturgeon.co.uk/code/dbad-license
  */
 class OAuth2_Provider_Linkedin extends OAuth2_Provider {
@@ -52,15 +52,19 @@ class OAuth2_Provider_Linkedin extends OAuth2_Provider {
     ));
     $user_email = json_decode(file_get_contents($url_email), true);
 
+    $args = array();
+    parse_str(parse_url($user['siteStandardProfileRequest']['url'], PHP_URL_QUERY), $args);
+    $user_id = $args['id'];
     return array(
+        'id' => $user_id,
         'first_name' => $user['firstName'],
         'last_name' => $user['lastName'],
-        'title' => $user['headline'],
+        'name' => $user['firstName'] . ' ' . $user['lastName'],
+        'description' => $user['headline'],
         'email' => $user_email,
         'urls' => array(
-            'LinkedIn' => $user->siteStandardProfileRequest->url
+            'LinkedIn' => $user['siteStandardProfileRequest']['url']
         ),
     );
   }
-
 }
