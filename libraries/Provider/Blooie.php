@@ -1,26 +1,45 @@
-<?php
-/**
- * Facebook OAuth2 Provider
- *
- * @package    CodeIgniter/OAuth2
- * @category   Provider
- * @author     Phil Sturgeon
- * @copyright  (c) 2012 HappyNinjas Ltd
- * @license    http://philsturgeon.co.uk/code/dbad-license
- */
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class OAuth2_Provider_Facebook extends OAuth2_Provider
-{
-	protected $scope = array('offline_access', 'email', 'read_stream');
+class OAuth2_Provider_Blooie extends OAuth2_Provider
+{  
+	public $scope = array('user.profile', 'user.picture');
+
+	public $method = 'POST';
 
 	public function url_authorize()
 	{
-		return 'https://www.facebook.com/dialog/oauth';
+		switch (ENVIRONMENT)
+		{
+			case PYRO_DEVELOPMENT:
+				return 'http://local.bloo.ie/oauth';
+
+			case PYRO_STAGING:
+				return 'http://blooie-staging.pagodabox.com/oauth';
+
+			case PYRO_PRODUCTIION:
+				return 'https://bloo.ie/oauth';
+
+			default:
+				exit('What the crap?!');
+		}
+		
 	}
 
 	public function url_access_token()
 	{
-		return 'https://graph.facebook.com/oauth/access_token';
+		switch (ENVIRONMENT)
+		{
+			case PYRO_DEVELOPMENT:
+				return 'http://local.bloo.ie/oauth/access_token';
+
+			case PYRO_STAGING:
+				return 'http://blooie-staging.pagodabox.com/oauth/access_token';
+
+			case PYRO_PRODUCTIION:
+				return 'https://bloo.ie/oauth/access_token';
+
+			default:
+		}
 	}
 
 	public function get_user_info(OAuth2_Token_Access $token)
@@ -34,7 +53,7 @@ class OAuth2_Provider_Facebook extends OAuth2_Provider
 		// Create a response from the request
 		return array(
 			'uid' => $user->id,
-			'nickname' => isset($user->username) ? $user->username : null,
+			'nickname' => $user->username,
 			'name' => $user->name,
 			'first_name' => $user->first_name,
 			'last_name' => $user->last_name,

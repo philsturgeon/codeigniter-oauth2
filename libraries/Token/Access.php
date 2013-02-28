@@ -33,8 +33,9 @@ class OAuth2_Token_Access extends OAuth2_Token
 	/**
 	 * Sets the token, expiry, etc values.
 	 *
-	 * @param   array   token options
-	 * @return  void
+	 * @param   array  $options   token options
+	 *
+	 * @throws Exception if required options are missing
 	 */
 	public function __construct(array $options = null)
 	{
@@ -52,6 +53,12 @@ class OAuth2_Token_Access extends OAuth2_Token
 		
 		// Some providers (not many) give the uid here, so lets take it
 		isset($options['uid']) and $this->uid = $options['uid'];
+		
+		//Vkontakte uses user_id instead of uid
+		isset($options['user_id']) and $this->uid = $options['user_id'];
+		
+		//Mailru uses x_mailru_vid instead of uid
+		isset($options['x_mailru_vid']) and $this->uid = $options['x_mailru_vid'];
 		
 		// We need to know when the token expires, add num. seconds to current time
 		isset($options['expires_in']) and $this->expires = time() + ((int) $options['expires_in']);

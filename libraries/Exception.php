@@ -42,12 +42,31 @@ class OAuth2_Exception extends Exception {
 
 		parent::__construct($message, $code);
 	}
+	
+	/**
+	* Returns the associated type for the error. This will default to
+	* 'Exception' when a type is not available.
+	*
+	* @return  string  The type for the error.
+	*/
+	public function getType()
+	{
+		if (isset($this->result['error']))
+		{
+			$message = $this->result['error'];
+			if (is_string($message))
+			{
+				// OAuth 2.0 Draft 10 style
+				return $message;
+			}
+		}
+		return 'Exception';
+	}
 
 	/**
 	 * To make debugging easier.
 	 *
-	 * @returns
-	 *   The string representation of the error.
+	 * @return  string  The string representation of the error.
 	 */
 	public function __toString()
 	{

@@ -9,7 +9,7 @@
  * @license    http://philsturgeon.co.uk/code/dbad-license
  */
 
-class OAuth_Provider_Instagram extends OAuth2_Provider 
+class OAuth2_Provider_Instagram extends OAuth2_Provider
 {
 	/**
 	 * @var  string  scope separator, most use "," but some like Google are spaces
