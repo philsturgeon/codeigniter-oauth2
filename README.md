@@ -1,5 +1,9 @@
 # Codeigniter OAuth 2.0
 
+## !!! DEPRECATED !!!
+**This package is no longer actively maintained. If somebody sends in a pull request with some major security bug 
+then I'll merge it, but otherwise nothing will be done. Use [thephpleague/oauth2-client](https://github.com/thephpleague/oauth2-client) instead.**
+
 Authorize users with your application in a driver-base fashion meaning one implementation works for multiple OAuth 2 providers. This is only to authenticate onto OAuth2 providers and not to build an OAuth2 service.
 
 Note that this Spark ONLY provides the authorization mechanism. There's an example controller below, however in a later version there will be a full controller.
