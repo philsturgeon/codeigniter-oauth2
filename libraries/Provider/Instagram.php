@@ -33,7 +33,17 @@ class OAuth2_Provider_Instagram extends OAuth2_Provider
 
 	public function get_user_info(OAuth2_Token_Access $token)
 	{
-		$user = $token->user;
+		$url  = 'https://api.instagram.com/v1/users/self/?';
+		$url .= http_build_query
+			(
+				array
+				(
+					'access_token' => $token->access_token,
+				)
+			);
+ 
+ 		$user = json_decode(file_get_contents($url));
+ 		$user = $user->data;
 
 		return array(
 			'uid' => $user->id,
