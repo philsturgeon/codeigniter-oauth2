@@ -47,12 +47,18 @@ abstract class OAuth2_Provider
 	protected $scope_seperator = ',';
 
 	/**
+	 * public key needed by odnoklassniki.ru API
+	 * @var string
+	 */
+	protected $public_key = '';
+
+	/**
 	 * Overloads default class properties from the options.
 	 *
 	 * Any of the provider options can be set here, such as app_id or secret.
 	 *
-	 * @param   array $options provider options
-	 * @throws  Exception if a required option is not provided
+	 * @param   array   provider options
+	 * @return  void
 	 */
 	public function __construct(array $options = array())
 	{
@@ -72,6 +78,7 @@ abstract class OAuth2_Provider
 		isset($options['callback']) and $this->callback = $options['callback'];
 		isset($options['secret']) and $this->client_secret = $options['secret'];
 		isset($options['scope']) and $this->scope = $options['scope'];
+		isset($options['public_key']) and $this->public_key = $options['public_key'];
 
 		$this->redirect_uri = site_url(get_instance()->uri->uri_string());
 	}
@@ -82,7 +89,7 @@ abstract class OAuth2_Provider
 	 *     // Get the provider signature
 	 *     $signature = $provider->signature;
 	 *
-	 * @param   string $key variable name
+	 * @param   string  variable name
 	 * @return  mixed
 	 */
 	public function __get($key)
@@ -108,18 +115,12 @@ abstract class OAuth2_Provider
 	 */
 	abstract public function url_access_token();
 
-	/**
-	 * @param OAuth2_Token_Access $token
-	 * @return array basic user info
-	 */
-	abstract public function get_user_info(OAuth2_Token_Access $token);
-
 	/*
 	* Get an authorization code from Facebook.  Redirects to Facebook, which this redirects back to the app using the redirect address you've set.
 	*/	
 	public function authorize($options = array())
 	{
-		$state = md5(uniqid(rand(), true));
+		$state = md5(uniqid(rand(), TRUE));
 		get_instance()->session->set_userdata('state', $state);
 
 		$params = array(
@@ -131,9 +132,7 @@ abstract class OAuth2_Provider
 			'approval_prompt'   => 'force' // - google force-recheck
 		);
 		
-		$params = array_merge($params, $this->params);
-		
-		redirect($this->url_authorize().'?'.http_build_query($params));
+		return $this->url_authorize().'?'.http_build_query($params);
 	}
 
 	/*
@@ -149,8 +148,6 @@ abstract class OAuth2_Provider
 			'client_secret' => $this->client_secret,
 			'grant_type' 	=> isset($options['grant_type']) ? $options['grant_type'] : 'authorization_code',
 		);
-		
-		$params = array_merge($params, $this->params);
 
 		switch ($params['grant_type'])
 		{
@@ -164,7 +161,7 @@ abstract class OAuth2_Provider
 			break;
 		}
 
-		$response = null;
+		$response = null;	
 		$url = $this->url_access_token();
 
 		switch ($this->method)
@@ -181,30 +178,18 @@ abstract class OAuth2_Provider
 
 			case 'POST':
 
-				/* 	$ci = get_instance();
-
-				$ci->load->spark('curl/1.2.1');
-
-				$ci->curl
-					->create($url)
-					->post($params, array('failonerror' => false));
-
-				$response = $ci->curl->execute();
-				*/
-
+				$postdata = http_build_query($params);
 				$opts = array(
 					'http' => array(
 						'method'  => 'POST',
 						'header'  => 'Content-type: application/x-www-form-urlencoded',
-						'content' => http_build_query($params),
+						'content' => $postdata
 					)
 				);
-
-				$_default_opts = stream_context_get_params(stream_context_get_default());
-				$context = stream_context_create(array_merge_recursive($_default_opts['options'], $opts));
+				$context  = stream_context_create($opts);
 				$response = file_get_contents($url, false, $context);
 
-				$return = json_decode($response, true);
+				$return = get_object_vars(json_decode($response));
 
 			break;
 
@@ -217,17 +202,7 @@ abstract class OAuth2_Provider
 			throw new OAuth2_Exception($return);
 		}
 		
-		switch ($params['grant_type'])
-		{
-			case 'authorization_code':
-				return OAuth2_Token::factory('access', $return);
-			break;
-
-			case 'refresh_token':
-				return OAuth2_Token::factory('refresh', $return);
-			break;
-		}
-		
+		return OAuth2_Token::factory('access', $return);
 	}
 
 }
